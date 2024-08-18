@@ -1,0 +1,18 @@
+{
+	"hours": {
+		"mon_1_open": "9:00",
+		"mon_1_close": "24:00",
+		"tue_1_open": "9:00",
+		"tue_1_close": "24:00",
+		"wed_1_open": "9:00",
+		"wed_1_close": "24:00",
+		"thu_1_open": "9:00",
+		"thu_1_close": "24:00",
+		"fri_1_open": "9:00",
+		"fri_1_close": "24:30",
+		"sat_1_open": "9:00",
+		"sat_1_close": "24:30",
+		"sun_1_open": "9:00",
+		"sun_1_close": "24:00"
+	}
+}
