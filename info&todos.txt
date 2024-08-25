@@ -1,0 +1,30 @@
+Back Info:
+DB: MongoDB
+Running with: Node.js Express.js
+DB collections: inventory, shifts, employees,
+
+Front Info:
+React Native
+Components: home(App.js), shifts.js, employees.js, sells.js, inventory.js
+
+
+To do:
+Front config component:
+    - overall config
+        - company name, logo, address,        
+    - shifts config
+        -open hours, festivitys closing, free days
+    - employees config
+        -roles (leader, auxiliar, other), hours, free days, benefits
+    - inventory config
+        - products list, max and min stock
+    - sells config (future not implemented)
+
+Form component to add employees
+Component to view and edit employees adding state to be on leave or on holiday
+Look for examples of shifts screens, calendar components
+
+
+MultiDB MongoDB
+PROS: scalability
+INC: to many petitions slow back
