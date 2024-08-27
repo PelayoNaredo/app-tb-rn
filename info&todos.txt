@@ -25,6 +25,13 @@ Component to view and edit employees adding state to be on leave or on holiday
 Look for examples of shifts screens, calendar components
 
 
+Login screen:
+    -model db for users
+    -mongodb middleware for security 
+    -jwt tokens for login
+    -brypt for password hashing
+    -async storage for token spreading
+    
 MultiDB MongoDB
 PROS: scalability
 INC: to many petitions slow back
