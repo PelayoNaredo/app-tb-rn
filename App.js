@@ -3,13 +3,13 @@ import { StyleSheet, Text, View, Image, Button, Pressable } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-import Shifts from "./src/components/shifts.js";
-import Employees from "./src/components/employees.js";
-import Sells from "./src/components/sells.js";
-import Inventory from "./src/components/inventory.js";
+import Shifts from "./src/screens/shifts.js";
+import Employees from "./src/screens/employees.js";
+import Sells from "./src/screens/sells.js";
+import Inventory from "./src/screens/inventory.js";
 import LoginScreen from "./src/screens/loginScreen.js";
 import RegisterScreen from "./src/screens/registerScreen.js";
-import HomeScreen from "./src/components/home.js";
+import HomeScreen from "./src/screens/home.js";
 
 const Stack = createNativeStackNavigator();
 

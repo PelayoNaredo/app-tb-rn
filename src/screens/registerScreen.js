@@ -1,20 +1,31 @@
 import React, { useState } from "react";
-import {
-	View,
-	Text,
-	TextInput,
-	StyleSheet,
-	Alert,
-	Pressable,
-} from "react-native";
+import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+// Regex
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
 
 const RegisterScreen = ({ navigation }) => {
 	const [username, setUsername] = useState("");
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [message, setMessage] = useState("");
 
 	const handleRegister = async () => {
+		if (!emailRegex.test(email)) {
+			setMessage("Invalid email format.");
+			return;
+		}
+
+		if (!passwordRegex.test(password)) {
+			setMessage(
+				"Password must be at least 8 characters long and include both letters and numbers."
+			);
+			return;
+		}
+
 		try {
 			const response = await fetch("http://192.168.1.136:3030/users/register", {
 				method: "POST",
@@ -31,29 +42,21 @@ const RegisterScreen = ({ navigation }) => {
 			const data = await response.json();
 
 			if (response.ok) {
-				// Si el registro es exitoso
 				const token = data.token;
 				await AsyncStorage.setItem("userToken", token);
 
-				Alert.alert(
-					"Registration Successful",
-					"You have registered successfully!"
+				setMessage(
+					"Registration Successful: You have registered successfully!"
 				);
 
-				// Navegar a la pantalla de inicio de sesión o dashboard
-				navigation.navigate("Login");
+				setTimeout(() => {
+					navigation.navigate("Login");
+				}, 1000);
 			} else {
-				// Si hay algún error
-				Alert.alert(
-					"Registration Failed",
-					data.message || "Failed to register. Please try again."
-				);
+				setMessage(data.message || "Failed to register. Please try again.");
 			}
 		} catch (error) {
-			Alert.alert(
-				"Registration Failed",
-				"Something went wrong. Please try again later."
-			);
+			setMessage("Something went wrong. Please try again later.");
 		}
 	};
 
@@ -88,9 +91,18 @@ const RegisterScreen = ({ navigation }) => {
 			<Pressable style={styles.button} onPress={handleRegister}>
 				<Text style={styles.buttonText}>Register</Text>
 			</Pressable>
-			<Pressable style={styles.button} onPress={navigation.navigate("Login")}>
+			<Pressable
+				style={styles.button}
+				onPress={() => navigation.navigate("Login")}
+			>
 				<Text style={styles.buttonText}>Back to Login</Text>
 			</Pressable>
+
+			{message ? (
+				<View style={styles.messageContainer}>
+					<Text style={styles.messageText}>{message}</Text>
+				</View>
+			) : null}
 		</View>
 	);
 };
@@ -102,7 +114,7 @@ const styles = StyleSheet.create({
 		margin: "auto",
 		justifyContent: "center",
 		paddingHorizontal: 20,
-		backgroundColor: "#fff",
+		backgroundColor: "#F2F2F2",
 	},
 	title: {
 		fontSize: 28,
@@ -123,11 +135,22 @@ const styles = StyleSheet.create({
 		paddingVertical: 15,
 		borderRadius: 5,
 		alignItems: "center",
+		marginTop: 20,
 	},
 	buttonText: {
 		color: "#fff",
 		fontSize: 18,
 		fontWeight: "bold",
+	},
+	messageContainer: {
+		marginTop: 20,
+		padding: 15,
+		backgroundColor: "#f8d7da",
+		borderRadius: 5,
+	},
+	messageText: {
+		color: "#721c24",
+		textAlign: "center",
 	},
 });
 

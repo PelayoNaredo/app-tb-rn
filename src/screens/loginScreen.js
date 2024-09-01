@@ -3,7 +3,6 @@ import {
 	View,
 	Text,
 	TextInput,
-	TouchableOpacity,
 	StyleSheet,
 	Alert,
 	Pressable,
@@ -13,12 +12,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 const LoginScreen = ({ navigation }) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const [message, setMessage] = useState("");
 
 	const handleLogin = async () => {
 		try {
-			console.log("Email:", email);
-			console.log("Password:", password);
-
 			const response = await fetch("http://192.168.1.136:3030/users/login", {
 				method: "POST",
 				headers: {
@@ -31,37 +28,28 @@ const LoginScreen = ({ navigation }) => {
 			});
 
 			const data = await response.json();
-			console.log("Response Data:", data);
 
 			if (response.ok) {
-				// Si el inicio de sesión es exitoso
 				const token = data.token;
 
 				await AsyncStorage.setItem("userToken", token);
 
-				Alert.alert("Login Successful", "You have logged in successfully!");
-
-				// Navegar a la siguiente pantalla o dashboard
-				navigation.navigate("Home");
+				setMessage("Login Successful!");
+				setTimeout(() => {
+					navigation.navigate("Home");
+				}, 1000);
 			} else {
-				// Si hay algún error
-				Alert.alert(
-					"Login Failed",
-					data.message || "Invalid email or password."
-				);
+				setMessage(data.message || "Invalid email or password.");
 			}
 		} catch (error) {
-			Alert.alert(
-				"Login Failed",
-				"Something went wrong. Please try again later."
-			);
+			setMessage("Something went wrong. Please try again later.");
 		}
 	};
 
 	return (
 		<View style={styles.container}>
 			<Text style={styles.title}>Login</Text>
-
+			{message ? <Text style={styles.message}>{message}</Text> : null}
 			<TextInput
 				style={styles.input}
 				placeholder="Email"
@@ -99,7 +87,7 @@ const styles = StyleSheet.create({
 		margin: "auto",
 		justifyContent: "center",
 		paddingHorizontal: 20,
-		backgroundColor: "#fff",
+		backgroundColor: "#F2F2F2",
 	},
 	title: {
 		fontSize: 28,
@@ -126,6 +114,12 @@ const styles = StyleSheet.create({
 		color: "#fff",
 		fontSize: 18,
 		fontWeight: "bold",
+	},
+	message: {
+		color: "red",
+		fontSize: 16,
+		textAlign: "center",
+		marginBottom: 15,
 	},
 });
 

@@ -1,31 +1,90 @@
 const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
 
-const getEmployee = async () => {
-	return await mongoose.connection.collection("employees").find({}).toArray();
-};
+// Define the employee schema
+const employeeSchema = new Schema(
+	{
+		firstName: {
+			type: String,
+			required: true,
+			trim: true,
+		},
+		lastName: {
+			type: String,
+			required: true,
+			trim: true,
+		},
+		email: {
+			type: String,
+			required: true,
+			unique: true,
+			trim: true,
+			lowercase: true,
+		},
+		phoneNumber: {
+			type: String,
+			required: true,
+			trim: true,
+		},
+		position: {
+			type: String,
+			required: true,
+			trim: true,
+		},
+		department: {
+			type: String,
+			trim: true,
+		},
+		hireDate: {
+			type: Date,
+			required: true,
+		},
+		salary: {
+			type: Number,
+			required: true,
+			min: 0,
+		},
+		address: {
+			street: {
+				type: String,
+				trim: true,
+			},
+			city: {
+				type: String,
+				trim: true,
+			},
+			postalCode: {
+				type: String,
+				trim: true,
+			},
+		},
+		status: {
+			type: String,
+			enum: ["active", "inactive", "on_leave", "terminated"],
+			default: "active",
+		},
+		emergencyContact: {
+			name: {
+				type: String,
+				trim: true,
+			},
+			phoneNumber: {
+				type: String,
+				trim: true,
+			},
+		},
+		dateOfBirth: {
+			type: Date,
+		},
+		notes: {
+			type: String,
+			trim: true,
+		},
+	},
+	{ timestamps: true }
+); // Automatically adds createdAt and updatedAt fields
 
-const createEmployee = async (employeeData) => {
-	const result = await mongoose.connection
-		.collection("employees")
-		.insertOne(employeeData);
-	return result.ops[0];
-};
+// Create the employee model
+const Employee = mongoose.model("Employee", employeeSchema);
 
-const updateEmployee = async (id, updates) => {
-	return await mongoose.connection
-		.collection("employees")
-		.updateOne({ _id: mongoose.Types.ObjectId(id) }, { $set: updates });
-};
-
-const deleteEmployee = async (id) => {
-	return await mongoose.connection.collection("employees").deleteOne({
-		_id: mongoose.Types.ObjectId(id),
-	});
-};
-
-module.exports = {
-	getEmployee,
-	createEmployee,
-	updateEmployee,
-	deleteEmployee,
-};
+module.exports = Employee;

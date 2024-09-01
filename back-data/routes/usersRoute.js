@@ -11,7 +11,7 @@ router.post("/register", async (req, res) => {
 		// User verification
 		let user = await User.findOne({ email });
 		if (user) {
-			return res.status(400).json({ message: "User already exists" });
+			return res.status(404).json({ message: "User already exists" });
 		}
 
 		// Create new user
@@ -30,22 +30,21 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
 	try {
 		const { email, password } = req.body;
-		console.log("Request Body:", req.body);
 
 		if (!email || !password) {
 			return res
-				.status(400)
+				.status(404)
 				.json({ message: "Email and password are required" });
 		}
 
 		const user = await User.findOne({ email });
 		if (!user) {
-			return res.status(400).json({ message: "Invalid email or password" });
+			return res.status(404).json({ message: "Invalid email or password" });
 		}
 
 		const isMatch = await user.comparePassword(password);
 		if (!isMatch) {
-			return res.status(400).json({ message: "Invalid email or password" });
+			return res.status(404).json({ message: "Invalid email or password" });
 		}
 
 		const token = user.generateAuthToken();
