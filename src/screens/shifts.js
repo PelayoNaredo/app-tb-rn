@@ -1,11 +1,11 @@
 import React from "react";
 import { Provider as PaperProvider } from "react-native-paper";
-import Timeline from "../components/timeline"; // Your main timeline
+import Timeline from "../components/ShiftManager";
 
-export default function shifts() {
-	return (
-		<PaperProvider>
-			<Timeline />
-		</PaperProvider>
-	);
+export default function Shifts() {
+  return (
+    <PaperProvider>
+      <Timeline />
+    </PaperProvider>
+  );
 }
