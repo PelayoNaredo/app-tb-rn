@@ -4,12 +4,12 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   ScrollView,
   Pressable,
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { useSubmitEmployee } from "../hooks/useSubmitEmployee";
 
 const EmployeeForm = () => {
   const [firstName, setFirstName] = useState("");
@@ -32,50 +32,25 @@ const EmployeeForm = () => {
   });
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [notes, setNotes] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
 
-  const handleSubmit = async () => {
-    try {
-      const response = await fetch("http://localhost:3030/employees", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          email,
-          phoneNumber,
-          position,
-          department,
-          hireDate,
-          salary,
-          address,
-          status,
-          emergencyContact,
-          dateOfBirth,
-          notes,
-        }),
-      });
+  const { submitEmployee, loading, errorMessage } = useSubmitEmployee();
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        setErrorMessage(
-          errorData.error ||
-            "An unknown error occurred. Please complete all fields correctly."
-        );
-        console.error();
-
-        return;
-      }
-
-      const result = await response.json();
-      console.log("Employee registered:", result);
-      setErrorMessage("Employee registered successfully."); // Clear error message if successful
-    } catch (error) {
-      console.error("Error registering employee:", error);
-      setErrorMessage("An unexpected error occurred");
-    }
+  const handleSubmit = () => {
+    submitEmployee({
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      position,
+      department,
+      hireDate,
+      salary,
+      address,
+      status,
+      emergencyContact,
+      dateOfBirth,
+      notes,
+    });
   };
 
   return (

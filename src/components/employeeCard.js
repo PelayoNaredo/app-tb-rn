@@ -2,10 +2,12 @@ import React, { useState } from "react";
 import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Picker } from "@react-native-picker/picker";
+import { useUpdateEmployee } from "../hooks/useUpdateEmployee";
 
 const EmployeeCard = ({ employee, onUpdate }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedEmployee, setEditedEmployee] = useState({ ...employee });
+  const { updateEmployee } = useUpdateEmployee(onUpdate);
 
   const getStatusColor = (status) => {
     switch (status.toLowerCase()) {
@@ -23,29 +25,8 @@ const EmployeeCard = ({ employee, onUpdate }) => {
   };
 
   const handleSave = async () => {
-    try {
-      const response = await fetch(
-        `http://localhost:3030/employees/${employee._id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(editedEmployee),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to update employee");
-      }
-
-      const updatedEmployee = await response.json();
-
-      onUpdate(updatedEmployee);
-      setIsEditing(false);
-    } catch (error) {
-      console.error("Error updating employee:", error);
-    }
+    await updateEmployee(editedEmployee);
+    setIsEditing(false);
   };
 
   return (
@@ -178,11 +159,13 @@ const EmployeeCard = ({ employee, onUpdate }) => {
             </View>
             <View style={styles.infoRow}>
               <Text style={styles.label}>Hire Date:</Text>
-              <Text style={styles.value}>{employee.hireDate}</Text>
+              <Text style={styles.value}>
+                {employee.hireDate.split("T")[0]}
+              </Text>
             </View>
             <View style={styles.infoRow}>
               <Text style={styles.label}>Salary:</Text>
-              <Text style={styles.value}>{employee.salary}</Text>
+              <Text style={styles.value}>{employee.salary}$/€</Text>
             </View>
             <View style={styles.infoRow}>
               <Text style={styles.label}>Notes:</Text>

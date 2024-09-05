@@ -5,7 +5,7 @@ DB collections: inventory, shifts, employees,
 
 Front Info:
 React Native
-Components: home(App.js), shifts.js, employees.js, sells.js, inventory.js
+Components: home(App.js), shifts.js, employees.js, sells.js, inventory.js, configScreen.js, loginScreen.js.
 
 
 To do:
@@ -20,18 +20,10 @@ Front config component:
         - products list, max and min stock
     - sells config (future not implemented)
 
-Form component to add employees
-Component to view and edit employees adding state to be on leave or on holiday
-Look for examples of shifts screens, calendar components
+Check auth token to work on first login
+Create and conect manage abscence DB
+Create special condition colors on shift manager
+Create config component
 
 
-Login screen:
-    -model db for users
-    -mongodb middleware for security 
-    -jwt tokens for login
-    -brypt for password hashing
-    -async storage for token spreading
-    
 MultiDB MongoDB
-PROS: scalability
-INC: to many petitions slow back

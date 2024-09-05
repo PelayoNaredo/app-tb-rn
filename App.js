@@ -98,7 +98,7 @@ export default function AppStart() {
           initialRouteName="Login"
           screenOptions={{
             headerStyle: { backgroundColor: "#595959" },
-            headerTintColor: "#F2F2F2",
+            headerTintColor: "#fff",
           }}
         >
           <Stack.Screen

@@ -1,19 +1,19 @@
 import React, { useState } from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
-import RegisterForm from "../components/regEmployeeForm"; // Make sure this path is correct
-import ShowEmployees from "../components/showEmployees"; // Make sure this path is correct
-
+import RegisterForm from "../components/regEmployeeForm";
+import ShowEmployees from "../components/showEmployees";
+import ManageAbsences from "../components/manageAbsences";
 export default function Employees() {
-  const [isRegistering, setIsRegistering] = useState(false);
+  const [view, setView] = useState("showEmployees");
 
   return (
     <View style={styles.container}>
       <View style={styles.switchContainer}>
         <Pressable
-          onPress={() => setIsRegistering(false)}
+          onPress={() => setView("showEmployees")}
           style={[
             styles.switchButton,
-            !isRegistering
+            view === "showEmployees"
               ? styles.switchButtonActive
               : styles.switchButtonInactive,
           ]}
@@ -21,19 +21,32 @@ export default function Employees() {
           <Text style={styles.switchButtonText}>Show Employees</Text>
         </Pressable>
         <Pressable
-          onPress={() => setIsRegistering(true)}
+          onPress={() => setView("registerEmployee")}
           style={[
             styles.switchButton,
-            isRegistering
+            view === "registerEmployee"
               ? styles.switchButtonActive
               : styles.switchButtonInactive,
           ]}
         >
           <Text style={styles.switchButtonText}>Register Employee</Text>
         </Pressable>
+        <Pressable
+          onPress={() => setView("manageAbsences")}
+          style={[
+            styles.switchButton,
+            view === "manageAbsences"
+              ? styles.switchButtonActive
+              : styles.switchButtonInactive,
+          ]}
+        >
+          <Text style={styles.switchButtonText}>Manage Absences</Text>
+        </Pressable>
       </View>
       <View style={styles.formContainer}>
-        {isRegistering ? <RegisterForm /> : <ShowEmployees />}
+        {view === "registerEmployee" && <RegisterForm />}
+        {view === "showEmployees" && <ShowEmployees />}
+        {view === "manageAbsences" && <ManageAbsences />}
       </View>
     </View>
   );
@@ -53,18 +66,23 @@ const styles = StyleSheet.create({
   },
   switchContainer: {
     flexDirection: "row",
+    alignItems: "center",
+    flexWrap: "wrap",
+    width: "100%",
     marginTop: 24,
-    marginBottom: 16,
+    marginBottom: 5,
+    justifyContent: "center",
   },
   switchButton: {
-    flex: 1,
+    flexWrap: "wrap",
     alignItems: "center",
     justifyContent: "center",
     paddingVertical: 5,
-    width: 170,
-    paddingHorizontal: 15,
+
+    paddingHorizontal: 10,
     borderRadius: 25,
     marginHorizontal: 5,
+    marginVertical: 5,
   },
   switchButtonActive: {
     backgroundColor: "blue",
