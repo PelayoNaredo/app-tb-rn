@@ -5,11 +5,11 @@ const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+  
 
   useEffect(() => {
     const checkToken = async () => {
-      setLoading(true);
+
 
       try {
         const token = await AsyncStorage.getItem('userToken');
@@ -36,16 +36,14 @@ export const AuthProvider = ({ children }) => {
         console.error('Error checking token:', e);
         setIsAuthenticated(false);
         await AsyncStorage.removeItem('userToken');
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
     checkToken();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, loading }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
       {children}
     </AuthContext.Provider>
   );

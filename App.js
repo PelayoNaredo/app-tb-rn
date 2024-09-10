@@ -10,17 +10,16 @@ import Inventory from './src/screens/inventory';
 import LoginScreen from './src/screens/loginScreen';
 import RegisterScreen from './src/screens/registerScreen';
 import HomeScreen from './src/screens/home';
+import ErrorScreen from './src/screens/errorScreen';
 
 const Stack = createNativeStackNavigator();
 
 function AppStart() {
-  const { isAuthenticated, loading } = React.useContext(AuthContext);
+  const { isAuthenticated } = React.useContext(AuthContext);
 
   return (
     <NavigationContainer>
-      {loading ? (
-        <Text>Loading...</Text> // Optionally show a loading spinner or screen
-      ) : isAuthenticated ? (
+      {isAuthenticated ? (
         <Stack.Navigator
           initialRouteName="Home"
           screenOptions={{
@@ -79,7 +78,7 @@ function AppStart() {
           />
           <Stack.Screen
             name="Home"
-            component={HomeScreen}
+            component={ErrorScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>
