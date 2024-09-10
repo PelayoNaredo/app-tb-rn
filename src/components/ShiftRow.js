@@ -1,37 +1,39 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 
-const ShiftRow = ({ employee, shifts, timeSlots, saveShift, selectedDate }) => {
-  const isWorking = (employee, time) => {
+const ShiftRow = ({ employee, shifts, timeSlots, saveShift, selectedDate, keyProp }) => {
+  const isWorking = (employeeId, time) => {
     return (
-      shifts[employee]?.some((shift) => {
+      shifts[employeeId]?.some((shift) => {
         const { startTime, endTime } = shift;
         return time >= startTime && time < endTime;
       }) || false
-    ); // Devuelve false si no hay turnos para el empleado
+    ); 
   };
 
-  const toggleShift = (employee, time) => {
-    const employeeShifts = shifts[employee] || [];
+  const toggleShift = (employeeId, time) => {
+    const employeeShifts = shifts[employeeId] || [];
     let newShifts;
 
-    if (isWorking(employee, time)) {
+    if (isWorking(employeeId, time)) {
+      // Remove the shift
       newShifts = employeeShifts.filter((shift) => {
         const { startTime, endTime } = shift;
         return time < startTime || time >= endTime;
       });
     } else {
+      // Add a new shift
       const endTime = timeSlots[timeSlots.indexOf(time) + 1] || "00:00";
       const newShift = { startTime: time, endTime };
       newShifts = [...employeeShifts, newShift];
     }
 
-    saveShift(employee, selectedDate.toISOString().split("T")[0], newShifts);
+    saveShift(employeeId, selectedDate.toLocaleDateString('en-CA'), newShifts);
   };
 
-  const calculateTotalHours = (employee) => {
+  const calculateTotalHours = (employeeId) => {
     let totalMinutes = 0;
-    (shifts[employee] || []).forEach((shift) => {
+    (shifts[employeeId] || []).forEach((shift) => {
       const { startTime, endTime } = shift;
       const startDate = new Date(`2023-01-01 ${startTime}`);
       const endDate = new Date(`2023-01-01 ${endTime}`);
@@ -43,19 +45,19 @@ const ShiftRow = ({ employee, shifts, timeSlots, saveShift, selectedDate }) => {
   return (
     <View style={styles.tableRow}>
       <Text style={styles.tableCell}>
-        {employee} ({calculateTotalHours(employee)}h)
+        {employee} ({calculateTotalHours(keyProp)}h)
       </Text>
       {timeSlots.map((time) => (
-        <TouchableOpacity
-          key={`${employee}-${time}`}
+        <Pressable
+          key={`${keyProp}-${time}`}
           style={[
             styles.tableCell,
-            isWorking(employee, time) ? styles.workingCell : {},
+            isWorking(keyProp, time) ? styles.workingCell : {},
           ]}
-          onPress={() => toggleShift(employee, time)}
+          onPress={() => toggleShift(keyProp, time)}
         >
           {/* Empty cell for visual feedback */}
-        </TouchableOpacity>
+        </Pressable>
       ))}
     </View>
   );

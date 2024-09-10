@@ -2,6 +2,7 @@ import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
 import { ScrollView } from "react-native-web";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 // Define the icon size and style
 const iconSize = 24;
@@ -20,10 +21,12 @@ export default function HomeScreen() {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>Business Management Dashboard</Text>
       <Pressable style={styles.logoutButton} onPress={handleLogout}>
-        <Text style={styles.logoutButtonText}>Logout</Text>
+      <Icon name="logout" size={16} color="#fff" />
       </Pressable>
+      <View style={styles.header}><Text style={styles.title}>Business Management Dashboard</Text></View>
+      
+      
       <View style={styles.grid}>
         <Card
           title="Employees"
@@ -79,6 +82,9 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: "#fff",
+  },
+  header:{
+    marginTop: 38,
   },
   title: {
     fontSize: 24,
@@ -138,9 +144,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#FF4D4D",
     padding: 10,
     borderRadius: 8,
-  },
-  logoutButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
   },
 });

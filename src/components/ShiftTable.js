@@ -6,10 +6,12 @@ export default function ShiftTable({
   shifts,
   timeSlots,
   employees,
-  selectedDate,
+  currentDate,
   saveShift,
 }) {
   return (
+    
+
     <ScrollView horizontal style={styles.tableContainer}>
       <View>
         <View style={styles.tableRow}>
@@ -21,13 +23,15 @@ export default function ShiftTable({
           ))}
         </View>
         {employees.map((employee) => (
+          
           <ShiftRow
             key={employee.id}
+            keyProp={employee.id}
             employee={employee.name}
             shifts={shifts}
             timeSlots={timeSlots}
             saveShift={saveShift}
-            selectedDate={selectedDate}
+            selectedDate={currentDate}
           />
         ))}
       </View>

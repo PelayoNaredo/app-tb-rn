@@ -1,77 +1,56 @@
 const Shift = require("../models/shiftsModel");
 
-const getAllShifts = async (req, res) => {
-  try {
-    const shifts = await Shift.find();
-    res.json(shifts);
-  } catch (error) {
-    res.status(500).json({ message: "Error: Can't obtain shifts.", error });
-  }
-};
 
 const getShiftsByDate = async (req, res) => {
   const { date } = req.params;
+
   try {
-    const parsedDate = new Date(date);
-    const shifts = await Shift.find({
-      date: {
-        $gte: new Date(parsedDate.setHours(0, 0, 0, 0)), // Inicio del día
-        $lt: new Date(parsedDate.setHours(23, 59, 59, 999)), // Fin del día
-      },
-    });
+    const shifts = await Shift.findById(date).exec();
+    if (!shifts) return res.status(404).json({ message: 'No shifts found for this date' });
     res.json(shifts);
-  } catch (error) {
-    res.status(500).json({ message: "Error obtaining shifts by date.", error });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
-const createShift = async (req, res) => {
-  const { employeeName, date, shifts } = req.body;
+
+const createOrUpdateShift = async (req, res) => {
+  const { date, employeeId, shifts } = req.body;
 
   try {
-    const newShift = new Shift({ employeeName, date, shifts });
-    await newShift.save();
-    res.status(201).json(newShift);
-  } catch (error) {
-    res.status(400).json({ message: "Error creating new shift.", error });
-  }
-};
+    const shift = await Shift.findById(date);
 
-const updateShift = async (req, res) => {
-  const { id } = req.params;
-  const { employeeName, date, shifts } = req.body;
+    if (shift) {
+      shift.shifts.set(employeeId, shifts);
+      await shift.save();
 
-  try {
-    const updatedShift = await Shift.findByIdAndUpdate(
-      id,
-      { employeeName, date, shifts },
-      { new: true }
-    );
-    if (!updatedShift)
-      return res.status(404).json({ message: "Error: Shift not found." });
-    res.json(updatedShift);
-  } catch (error) {
-    res.status(400).json({ message: "Error updating shift.", error });
+    } else {
+      const newShift = new Shift({
+        _id: date,
+        shifts: { [employeeId]: shifts }
+      });
+
+      await newShift.save();
+    }
+    res.status(200).json({ message: 'Shift saved successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
 const deleteShift = async (req, res) => {
-  const { id } = req.params;
-
+  const { date } = req.params;
   try {
-    const deletedShift = await Shift.findByIdAndDelete(id);
-    if (!deletedShift)
-      return res.status(404).json({ message: "Shift not found." });
-    res.json({ message: "Shift deleted successfully." });
-  } catch (error) {
-    res.status(500).json({ message: "Error deleting shift.", error });
+    const result = await Shift.findByIdAndDelete(date);
+    if (!result) return res.status(404).json({ message: 'No shift found for this date' });
+    res.status(200).json({ message: 'Shift deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };
 
 module.exports = {
-  getAllShifts,
   getShiftsByDate,
-  createShift,
-  updateShift,
+  createOrUpdateShift,
   deleteShift,
 };

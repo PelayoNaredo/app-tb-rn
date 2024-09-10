@@ -20,11 +20,19 @@ export default function ShiftManager() {
     error: employeesError,
   } = useFetchEmployees();
 
-  const [selectedDate, setSelectedDate] = useState(new Date());
+  
+
+  const realDate = new Date();
+ 
+
+const [selectedDate, setSelectedDate] = useState(realDate);
 
   useEffect(() => {
-    fetchShiftsByDate(selectedDate.toISOString().split("T")[0]);
+    const newDate = new Date(selectedDate).toLocaleDateString('en-CA'); 
+    fetchShiftsByDate(newDate);
   }, [selectedDate]);
+
+  
 
   const isLoading = shiftsLoading || employeesLoading;
   const hasError = employeesError;
@@ -46,7 +54,7 @@ export default function ShiftManager() {
             shifts={shifts}
             timeSlots={generateTimeSlots()}
             employees={employees}
-            selectedDate={selectedDate}
+            currentDate={selectedDate}
             saveShift={saveShift}
           />
         )}

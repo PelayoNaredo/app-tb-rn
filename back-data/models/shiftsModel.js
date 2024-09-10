@@ -1,29 +1,21 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
-const shiftSchema = new mongoose.Schema({
-  employeeName: {
-    type: String,
+const ShiftSchema = new mongoose.Schema({
+  _id: {
+    type: String, // String for 'YYYY-MM-DD'
     required: true,
   },
-  date: {
-    type: Date,
-    required: true,
-    index: true,
+  shifts: {
+    type: Map, //Use map for a flexible k=>v 
+    of: [
+      {
+        startTime: { type: String, required: true },
+        endTime: { type: String, required: true },
+      },
+    ],
   },
-  shifts: [
-    {
-      startTime: {
-        type: String,
-        required: true,
-      },
-      endTime: {
-        type: String,
-        required: true,
-      },
-    },
-  ],
 });
 
-const Shift = mongoose.model("Shift", shiftSchema);
+const Shift = mongoose.model('Shift', ShiftSchema);
 
 module.exports = Shift;

@@ -14,6 +14,7 @@ const RegisterScreen = ({ navigation }) => {
   const [message, setMessage] = useState("");
 
   const handleRegister = async () => {
+    // to make an admin user for develop coment since this 
     if (!emailRegex.test(email)) {
       setMessage("Invalid email format.");
       return;
@@ -25,7 +26,7 @@ const RegisterScreen = ({ navigation }) => {
       );
       return;
     }
-
+    // to this line
     try {
       const response = await fetch("http://localhost:3030/users/register", {
         method: "POST",

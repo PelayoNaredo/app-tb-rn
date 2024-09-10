@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import { DatePickerModal } from "react-native-paper-dates";
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function DateSelector({ selectedDate, setSelectedDate }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -10,15 +11,21 @@ export default function DateSelector({ selectedDate, setSelectedDate }) {
   };
 
   const onConfirm = (params) => {
-    setShowDatePicker(false);
-    setSelectedDate(params.date);
+    console.log("Date selected on picker:", params.date.toISOString().split("T")[0]); // Depuración: ver la fecha seleccionada
+    if (params.date instanceof Date) {
+      setSelectedDate(new Date(params.date)); // Asegurarse de que es un objeto Date
+      setShowDatePicker(false);
+    } else {
+      console.error("Selected date is not a Date object");
+    }
   };
-
   return (
     <View style={styles.datePickerContainer}>
-      <Button title="Select Date" onPress={() => setShowDatePicker(true)} />
+      <Pressable style={styles.iconButton} onPress={() => setShowDatePicker(true)}>
+        <Icon name="calendar-today" size={24} color="#fff" />
+      </Pressable>
       <Text style={styles.selectedDate}>
-        Selected Date: {selectedDate.toLocaleDateString()}
+        {selectedDate.toLocaleDateString('en-CA')}
       </Text>
       <DatePickerModal
         visible={showDatePicker}
@@ -42,5 +49,12 @@ const styles = StyleSheet.create({
   selectedDate: {
     marginLeft: 10,
     fontSize: 16,
+    fontWeight: "bold",
+    fontVariant: "italic",
+  },
+  iconButton: {
+    padding: 10,
+    backgroundColor: "#52a9ff",
+    borderRadius: "50%",
   },
 });
