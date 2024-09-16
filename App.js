@@ -2,7 +2,6 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import AuthContext, { AuthProvider } from './AuthContext';
-import { Text } from "react-native";
 import Shifts from './src/screens/shifts';
 import Employees from './src/screens/employees';
 import Sales from './src/screens/sales';
@@ -11,21 +10,23 @@ import LoginScreen from './src/screens/loginScreen';
 import RegisterScreen from './src/screens/registerScreen';
 import HomeScreen from './src/screens/home';
 import ErrorScreen from './src/screens/errorScreen';
+import ConfigScreen from './src/screens/configScreen'
 
 const Stack = createNativeStackNavigator();
 
 function AppStart() {
   const { isAuthenticated } = React.useContext(AuthContext);
+  console.log('auth:', isAuthenticated)
 
   return (
     <NavigationContainer>
       {isAuthenticated ? (
         <Stack.Navigator
-          initialRouteName="Home"
-          screenOptions={{
-            headerStyle: { backgroundColor: '#008732' },
-            headerTintColor: '#F2F2F2',
-          }}
+        initialRouteName={isAuthenticated ? "Home" : "Login"}
+        screenOptions={{
+          headerStyle: isAuthenticated ? { backgroundColor: '#008732' } : { backgroundColor: '#595959' },
+          headerTintColor: isAuthenticated ? '#F2F2F2' : '#fff',
+        }}
         >
           <Stack.Screen
             name="Home"
@@ -51,6 +52,11 @@ function AppStart() {
             name="Inventory"
             component={Inventory}
             options={{ title: 'Inventory Management' }}
+          />
+          <Stack.Screen
+            name="Configuration"
+            component={ConfigScreen}
+            options={{ title: 'App Configuration' }}
           />
           <Stack.Screen
             name="Login"

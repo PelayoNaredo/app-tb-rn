@@ -1,29 +1,33 @@
 Back Info:
-DB: MongoDB
+DB: MongoDB Runing with CORS use and configure your port.
 Running with: Node.js Express.js
-DB collections: inventory, shifts, employees,
+DB collections: inventory, shifts, employees. 
 
 Front Info:
 React Native
-Components: home(App.js), shifts.js, employees.js, sells.js, inventory.js, configScreen.js, loginScreen.js.
+Components: home.js, shifts.js, employees.js, sales.js, inventory.js, configScreen.js, loginScreen.js, registerScreen.js, errorScreen.js
+Hooks:{Insert hooks and descriprions, too lazy now}
 
 
 To do:
-Front config component:
-    - overall config
-        - company name, logo, address,        
-    - shifts config
-        -open hours, festivitys closing, free days
-    - employees config
-        -roles (leader, auxiliar, other), hours, free days, benefits
+Front config component:  
     - inventory config
-        - products list, max and min stock
+        - products list, max and min stock (must have image and code for code bar reader)
     - sells config (future not implemented)
-
-Check auth token to work on first login
-Create and conect manage abscence DB
-Create special condition colors on shift manager
-Create config component
+    - set the back url
 
 
-MultiDB MongoDB
+Export to hooks all the petitions to server (look at back-data routes).
+Config button on login screen to set the back URL (only if not stablished).
+Connect manage abscence to employees DB.
+Create and connect config on DB.
+Create special condition colors on shift manager.
+Connect budget to employees cost.
+Option to set number of employees per hour in shifts.
+Implement name and logo on the home screen (if not just home text).
+
+Long term:
+Stats on homeScreen.
+Working chat.
+Create and export to pdf stats and shifts.
+In app Alerts.

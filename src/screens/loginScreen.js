@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import AuthContext from "../../AuthContext"; 
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState("info"); // "info" or "success"
+  const { setIsAuthenticated } = useContext(AuthContext); 
 
   const handleLogin = async () => {
     try {
@@ -27,7 +29,7 @@ const LoginScreen = ({ navigation }) => {
         const token = data.token;
 
         await AsyncStorage.setItem("userToken", token);
-
+        setIsAuthenticated(true); // Actualiza el estado de autenticación
         setMessage("Login Successful!");
         setMessageType("success");
         setTimeout(() => {
@@ -42,6 +44,8 @@ const LoginScreen = ({ navigation }) => {
       setMessageType("error");
     }
   };
+  
+  
 
   return (
     <View style={styles.container}>
